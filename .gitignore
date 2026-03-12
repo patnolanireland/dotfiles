@@ -1,0 +1,16 @@
+.netrwhist
+npm-debug.log
+
+# System Files
+.DS_Store
+Thumbs.db
+out
+
+# Ctags
+.ctags
+tags
+tags.lock
+tags.temp
+tags.tmp
+tags
+tags.temp
