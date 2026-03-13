@@ -1,3 +1,4 @@
+-- plugins/00-theme.lua
 return {
     {
         'overcache/NeoSolarized',

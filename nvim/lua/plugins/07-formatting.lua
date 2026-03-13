@@ -1,3 +1,4 @@
+-- plugins/07-formatting.lua
 return {
     {
         "stevearc/conform.nvim",

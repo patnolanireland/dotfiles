@@ -1,3 +1,4 @@
+-- core/options.lua
 vim.opt.syntax = "on"
 vim.opt.ruler = true
 vim.opt.number = true
@@ -22,4 +23,5 @@ vim.opt.shiftwidth = 2
 vim.opt.shiftround = true
 vim.opt.splitright = true
 vim.opt.statusline = "%F"
-vim.opt.grepprg = "ag --nogroup --nocolor"
+vim.opt.grepprg = "rg --vimgrep --no-heading --smart-case"
+vim.opt.grepformat = "%f:%l:%c:%m,%f:%l:%m"

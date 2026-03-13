@@ -1,4 +1,16 @@
+-- plugins/06-other.lua
 return {
+	-- Lua nvim
+	{
+		"folke/lazydev.nvim",
+		ft = "lua", -- only load on lua files
+		opts = {
+			library = {
+				-- Load luvit types when the `vim.uv` word is found
+				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+			},
+		},
+	},
 	-- Editing
 	{ 'tpope/vim-unimpaired' },
 	{ 'tpope/vim-commentary' },
@@ -17,14 +29,14 @@ return {
 		'nvim-treesitter/nvim-treesitter',
 		build = ':TSUpdate',
 		config = function()
-			require('nvim-treesitter.configs').setup({
+			require('nvim-treesitter.config').setup({
 				ensure_installed = {
 					"javascript", "typescript", "tsx", "go",
 					"rust", "hcl", "graphql", "c_sharp"
 				},
 				-- These fields satisfy the lua_ls 'missing-fields' warning
 				sync_install = false,
-				auto_install = true,     -- Automatically install missing parsers when entering buffer
+				auto_install = true, -- Automatically install missing parsers when entering buffer
 				ignore_install = {},
 				modules = {},
 

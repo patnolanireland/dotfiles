@@ -1,3 +1,4 @@
+-- plugins/02-rust.lua
 return {
 	{
 		'mrcjkb/rustaceanvim',

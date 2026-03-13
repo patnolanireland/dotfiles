@@ -6,9 +6,21 @@ echo "Creating symlinks..."
 
 # Neovim
 mkdir -p "$HOME/.config"
-ln -sf "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
+ln -snf "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 
 # Tmux
-ln -sf "$DOTFILES_DIR/tmux/.tmux.conf" "$HOME/.tmux.conf"
+ln -snf "$DOTFILES_DIR/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
-echo "Done!"
+# Zsh
+ln -snf "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
+
+echo "Symlinks created!"
+
+# Run component-specific setups
+echo "Running component setups..."
+
+if [ -x "$DOTFILES_DIR/tmux/setup.sh" ]; then
+    "$DOTFILES_DIR/tmux/setup.sh"
+fi
+
+echo "All done! You are ready to go."

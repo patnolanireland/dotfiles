@@ -1,3 +1,4 @@
+-- plugins/05-git.lua
 return {
     {
         'tpope/vim-fugitive',

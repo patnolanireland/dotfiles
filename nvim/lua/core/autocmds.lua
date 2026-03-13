@@ -1,3 +1,4 @@
+-- core/autocmds.lua
 -- This function will run for *every* LSP server that attaches
 local function on_attach(client, bufnr)
 	-- Set up keymaps only for this buffer
