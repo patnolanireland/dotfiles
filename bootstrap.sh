@@ -42,8 +42,21 @@ elif [ "$OS" = "Linux" ]; then
             
             echo "Installing core dependencies via apt..."
             sudo apt-get update
+
+            # Add HashiCorp repo for the official Packer release
+            if ! command -v packer &> /dev/null; then
+                echo "Adding HashiCorp repository for Packer..."
+                curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+                echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+                sudo apt-get update
+            fi
             
-            sudo apt-get install -y silversearcher-ag curl neovim tmux cmake build-essential unzip git ripgrep fd-find python3-pip python3-venv luarocks golang-go php composer tree fzy
+            # Merged your standard dotfiles tools with the required Virtualization/QEMU/TPM stack
+            sudo apt-get install -y silversearcher-ag curl neovim tmux cmake build-essential \
+                unzip git ripgrep fd-find python3-pip python3-venv luarocks golang-go php \
+                composer tree fzy qemu-system-x86 qemu-utils ovmf swtpm genisoimage \
+                qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager packer \
+			 caffeine
             
             # Fix fd naming for Telescope
             mkdir -p "$HOME/.local/bin"
@@ -52,8 +65,21 @@ elif [ "$OS" = "Linux" ]; then
             fi
             export PATH="$HOME/.local/bin:$PATH"
 
-		  # WSL-specific Clipboard bridging
-		  if [ "$IS_WSL" = true ]; then
+            # ---------------------------------------------------------
+            # Virtualization Group & Permission Fixes
+            # ---------------------------------------------------------
+            echo "Configuring Virtualization groups and SWTPM permissions..."
+            sudo usermod -aG kvm $USER
+            sudo usermod -aG libvirt $USER
+            sudo usermod -aG swtpm $USER
+
+            # Fix SWTPM certificate authority permissions (based on your previous manual fixes)
+            sudo mkdir -p /var/lib/swtpm-localca
+            sudo chgrp swtpm /var/lib/swtpm-localca
+            sudo chmod g+rwx /var/lib/swtpm-localca
+
+            # WSL-specific Clipboard bridging
+            if [ "$IS_WSL" = true ]; then
                 echo "WSL detected: Installing win32yank for Neovim clipboard support..."
                 mkdir -p "$HOME/.local/bin"
                 if [ ! -f "$HOME/.local/bin/win32yank.exe" ]; then
@@ -68,7 +94,8 @@ elif [ "$OS" = "Linux" ]; then
 
             echo "Updating Python Neovim provider..."
             pip3 install --user --upgrade pynvim --break-system-packages
-            
+		  
+		  curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
         else
             echo "Linux distribution '$NAME' detected. Automated install unsupported."
             exit 1
