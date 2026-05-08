@@ -12,52 +12,72 @@ return {
 		},
 	},
 	-- Editing
-	{ 'tpope/vim-unimpaired' },
-	{ 'tpope/vim-commentary' },
-	{ "kylechui/nvim-surround", config = function() require("nvim-surround").setup({}) end },
+	{ "tpope/vim-unimpaired" },
+	{ "tpope/vim-commentary" },
+	{
+		"kylechui/nvim-surround",
+		config = function()
+			require("nvim-surround").setup({})
+		end,
+	},
 
 	-- UI
 	{
-		'scrooloose/nerdtree',
-		cmd = 'NERDTreeToggle',
+		"scrooloose/nerdtree",
+		cmd = "NERDTreeToggle",
 		keys = {
-			{ "<leader>k",  ":NERDTreeToggle<cr>", silent = true, desc = "Toggle NERDTree" },
-			{ "<leader>ff", ":NERDTreeFind<cr>",   silent = true, desc = "Find current file in NERDTree" },
-		}
+			{ "<leader>k", ":NERDTreeToggle<cr>", silent = true, desc = "Toggle NERDTree" },
+			{ "<leader>ff", ":NERDTreeFind<cr>", silent = true, desc = "Find current file in NERDTree" },
+		},
 	},
 	{
-		'nvim-treesitter/nvim-treesitter',
-		build = ':TSUpdate',
+		-- The new 0.12+ community standard for installing parsers
+		"romus204/tree-sitter-manager.nvim",
 		config = function()
-			require('nvim-treesitter.config').setup({
+			require("tree-sitter-manager").setup({
 				ensure_installed = {
-					"javascript", "typescript", "tsx", "go",
-					"rust", "hcl", "graphql", "c_sharp"
+					"javascript",
+					"typescript",
+					"tsx",
+					"go",
+					"rust",
+					"hcl",
+					"graphql",
+					"c_sharp",
+					"markdown",
+					"c",
+					"lua",
+					"vim",
+					"vimdoc",
+					"query",
+					"powershell",
 				},
-				-- These fields satisfy the lua_ls 'missing-fields' warning
-				sync_install = false,
-				auto_install = true, -- Automatically install missing parsers when entering buffer
-				ignore_install = {},
-				modules = {},
-
-				highlight = { enable = true },
+				auto_install = true, -- Auto-install missing parsers on buffer enter
 			})
 
-			-- Tell Neovim to treat .cake files as C# so treesitter applies the syntax
+			-- Neovim 0.12 handles highlighting natively!
+			-- We just need an autocommand to start it for every buffer.
+			vim.api.nvim_create_autocmd("FileType", {
+				callback = function(event)
+					pcall(vim.treesitter.start, event.buf)
+				end,
+			})
+
+			-- Tell Neovim to treat .cake files as C#
 			vim.filetype.add({
 				extension = {
-					cake = 'cs',
-				}
+					cake = "cs",
+				},
 			})
-		end
+		end,
 	},
 
 	-- Utilities
-	{ 'ludovicchabant/vim-gutentags',     event = 'VimEnter' },
-	{ 'editorconfig/editorconfig-vim' },
-	{ 'tyru/open-browser.vim' },
+	{ "ludovicchabant/vim-gutentags", event = "VimEnter" },
+	{ "editorconfig/editorconfig-vim" },
+	{ "tyru/open-browser.vim" },
 
 	-- PlantUML
-	{ 'aklt/plantuml-syntax',             ft = 'plantuml' },
-	{ 'weirongxu/plantuml-previewer.vim', ft = 'plantuml' },
+	{ "aklt/plantuml-syntax", ft = "plantuml" },
+	{ "weirongxu/plantuml-previewer.vim", ft = "plantuml" },
 }

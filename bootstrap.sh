@@ -19,7 +19,7 @@ if [ "$OS" = "Darwin" ]; then
     echo "Installing core dependencies via Homebrew..."
     brew update
     # Removed 'rust' from this list
-    brew install neovim tmux cmake gcc ripgrep fd luarocks python go
+    brew install neovim tmux cmake gcc ripgrep fd luarocks python go powershell
 
     echo "Updating Python Neovim provider..."
     pip3 install --user --upgrade pynvim --break-system-packages

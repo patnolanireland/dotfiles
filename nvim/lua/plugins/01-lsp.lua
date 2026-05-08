@@ -39,6 +39,7 @@ return {
 					"pyright",
 					"gopls",
 					"intelephense",
+					"powershell_es",
 				},
 				handlers = {
 					-- Default handler for all servers
